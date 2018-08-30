@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+   
+   <script>
+function Container() {
+  this.id = '';
+  this.className = '';
+  this.htmlCode = '';
+}
+
+Container.prototype.render = function () {
+  return this.htmlCode;
+}
+
+Container.prototype.clear = function () {
+  this.htmlCode = '';
+}
+
+Container.prototype.log = function () {
+  if (this.id) {
+    console.log(this.id);
+  } else {
+    console.log(this.className);
+  }
+}
+
+// Меню
+
+function Menu(my_id, my_class, my_items) {
+  Container.call(this);
+  this.id = my_id;
+  this.className = my_class;
+  this.items = my_items;
+}
+
+Menu.prototype = Object.create(Container.prototype);
+
+Menu.prototype.render = function () {
+  var result = "<ul class='" + this.className + "' id='" + this.id + "'>";
+  for (var item in this.items) {
+    if (this.items[item] instanceof MenuItem) {
+        result += this.items[item].render();
+    }
+  }
+  result += '</ul>';
+  return result;
+}
+
+//Элемент меню
+function MenuItem(my_href, my_name) {
+  Container.call(this);
+  this.className = 'menu-item';
+  this.href = my_href;
+  this.name = my_name;
+}
+
+MenuItem.prototype = Object.create(Container.prototype);
+
+MenuItem.prototype.render = function() {
+  return '<li class="' + this.className + '"> <a href="' + this.href + '">' + this.name + '</a></li>';
+  result += Menu.prototype.render.call(this);
+  result += '</li>';
+  return result;
+}
+
+var menuSubItem1 = new MenuItem ('/', 'Россия');
+var menuSubItem2 = new MenuItem ('/', 'Турция');
+var menuSubItem3 = new MenuItem ('/', 'ОАЭ');
+var menuSubItem4 = new MenuItem ('/', 'Пляжные');
+var menuSubItem5 = new MenuItem ('/', 'Экскурсионные');
+var menuSubItem6 = new MenuItem ('/', 'Выходного дня');
+
+var menu_item1 = new MenuItem('/', 'Главная');
+var menu_item2 = new MenuItem('/country', 'Страны', {0: menuSubItem1, 1: menuSubItem2, 2: menuSubItem3});
+var menu_item3 = new MenuItem('/tours', 'Туры', {0: menuSubItem4, 1: menuSubItem5, 2: menuSubItem6});
+
+
+var menu = new Menu('my_menu', 'menu_class', {0: menu_item1, 1: menu_item2, 2: menu_item3});
+
+
+menu.log();
+menu_item1.log();
+
+document.write(menu.render());
+</script>
+    
+</body>
+</html>
